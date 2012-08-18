@@ -109,13 +109,8 @@ class ProgressHandler(webapp2.RequestHandler):
 		self.response.out.write(template.render({"tapins":tapins}))
 
 
-def handle_404(request, response, exception):
-	response.set_status(404)
-	response.out.write('404 - Not found')
-
-
 class NewLocationHandler(webapp2.RequestHandler):
-	def get(self, slug, name):
+	def post(self, slug, name):
 		location = Location.gql("WHERE slug = :slug", slug=slug).get()
 		if location:
 			self.error(500)
@@ -127,10 +122,14 @@ class NewLocationHandler(webapp2.RequestHandler):
 			location.put()
 			self.redirect("/location/%s" % slug)
 
-class HtmlHandler(webapp2.RequestHandler):
-	def get(self, page):
-		template = jinja_environment.get_template("%s.html" % page)
-		self.response.out.write(template.render({}))
+	def get(self):
+		template = jinja_environment.get_template("new-location.html")
+		self.response.out.write(template.render())
+		
+
+def handle_404(request, response, exception):
+	response.set_status(404)
+	response.out.write('404 - Not found')
 
 app = webapp2.WSGIApplication([
 	('/', MainHandler),
@@ -139,8 +138,7 @@ app = webapp2.WSGIApplication([
 	('/tap/(.+)', TapHandler),
 	('/tapins', ProgressHandler),
 	('/__delete', DeleteHandler),
-	('/(.*).html',HtmlHandler),
-	('/new-location/(.*)/(.*)',NewLocationHandler)
+	('/new-location', NewLocationHandler)
 	], debug=True)
 
 app.error_handlers[404] = handle_404
