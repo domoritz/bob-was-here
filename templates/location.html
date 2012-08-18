@@ -2,7 +2,7 @@
 
 
 {% block title %}
-<a href="/user" data-icon="gear" class="ui-btn-right">Your Account</a>
+<a href="/user" data-icon="gear" class="ui-btn-right">{{ user.nickname() }}</a>
 {% endblock %}
 
 {% block content %}
@@ -16,7 +16,7 @@
 </p>
 
 <h3>People who have tapped-in here before</h3>
-<ol data-role="listview" data-theme="a">
+<ol data-role="listview">
 	{% for person in people %}
     <li>{{ person.nickname() }}</li>
 	{% endfor %}

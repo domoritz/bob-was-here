@@ -57,7 +57,7 @@ class LocationHandler(webapp2.RequestHandler):
 
 			template = jinja_environment.get_template("location.html")
 			self.response.out.write(template.render({
-				"username":users.get_current_user().nickname(),
+				"user": users.get_current_user(),
 				"location": location,
 				"people": people
 			}))
