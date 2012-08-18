@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<form method="POST" action="/new-location">
+<form method="POST" action="/new-location" data-ajax="false">
 	<label for="slug">Slug: </label><input id="slug" name="slug" type="text" value=""/>
 	<label for="name">Name: </label><input id="name" name="name" type="text" value=""/>
 	<label for="description">Description: </label><textarea id="description" name=description></textarea>
