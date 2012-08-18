@@ -1,4 +1,5 @@
 from google.appengine.ext import db
+from google.appengine.api.users import User
 
 class Location(db.Model):
 	slug = db.StringProperty()
@@ -7,6 +8,6 @@ class Location(db.Model):
 
 
 class Tapin(db.Model):
-	user_id = db.StringProperty()
+	user = db.UserProperty()
 	location = db.ReferenceProperty(Location)
 	date = db.DateTimeProperty(auto_now_add=True)
