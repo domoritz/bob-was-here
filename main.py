@@ -26,18 +26,36 @@ class MainHandler(webapp2.RequestHandler):
 		else:
 			self.redirect(users.create_login_url("/"))
 
+
 class LocationHandler(webapp2.RequestHandler):
 	def get(self, slug):
+		people = []
+
 		q = Location.gql("WHERE slug = :slug", slug = slug)
 
 		location = q.get()
 		if location:
 			print location.name
-			self.response.out.write(slug + " " + location.name)
+
+			q = Tapin.gql("WHERE location = :location", location = location)
+
+			for tapin in q:
+				people.append(tapin.user)
+
+			self.response.out.write(slug + " " + location.name + " " + people)
 		else:
+			self.error(404)
 			self.response.out.write("Not found")
+
+
+class NotFoundPageHandler(webapp.RequestHandler):
+    def get(self):
+        self.error(404)
+        self.response.out.write('Not found')
+
 
 app = webapp2.WSGIApplication([
 	('/', MainHandler),
-	('/location/(.*)', LocationHandler)
+	('/location/(.*)', LocationHandler),
+	('/.*', NotFoundPageHandler)
 	], debug=True)
