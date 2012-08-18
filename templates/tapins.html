@@ -2,8 +2,10 @@
 
 {%block content %}
 
+<ul data-role="listview" data-theme="a">
 {%for tapin in tapins%}
   <li>{{tapin.location.name}} at {{tapin.date|datetime}}</li>
 {% endfor %}
+</ul>
 
 {% endblock %}

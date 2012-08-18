@@ -7,6 +7,6 @@ class Location(db.Model):
 
 
 class Tapin(db.Model):
-	user = db.UserProperty()
+	user_id = db.StringProperty()
 	location = db.ReferenceProperty(Location)
 	date = db.DateTimeProperty(auto_now_add=True)
