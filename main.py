@@ -22,7 +22,7 @@ from google.appengine.api import users
 from google.appengine.ext import db
 
 jinja_environment = jinja2.Environment(
-    loader=jinja2.FileSystemLoader(os.path.dirname(__file__) + "/templates/"))
+	loader=jinja2.FileSystemLoader(os.path.dirname(__file__) + "/templates/"))
 
 def format_datetime(datetime):
     return value.strftime('%d/%m/%Y')
@@ -31,23 +31,46 @@ jinja_environment.filters['datetime'] = format_datetime
 
 
 class MainHandler(webapp2.RequestHandler):
-    def get(self):
-        if users.get_current_user():
-            template = jinja_environment.get_template("index.html")
-            self.response.out.write(template.render({"username":users.get_current_user().nickname()}))
-        else:
-            self.redirect(users.create_login_url("/"))
+	def get(self):
+		if users.get_current_user():
+			template = jinja_environment.get_template("index.html")
+			self.response.out.write(template.render({"username":users.get_current_user().nickname()}))
+		else:
+			self.redirect(users.create_login_url("/"))
+
 
 class LocationHandler(webapp2.RequestHandler):
 	def get(self, slug):
+		people = []
+
 		q = Location.gql("WHERE slug = :slug", slug = slug)
 
 		location = q.get()
 		if location:
 			print location.name
-			self.response.out.write(slug + " " + location.name)
+
+			q = Tapin.gql("WHERE location = :location", location = location)
+
+			for tapin in q:
+				people.append(tapin.user)
+
+			template = jinja_environment.get_template("location.html")
+			self.response.out.write(template.render({
+				"username":users.get_current_user().nickname(),
+				"location": location.name,
+				"people": people
+			}))
+
 		else:
+			self.error(404)
 			self.response.out.write("Not found")
+
+
+class NotFoundPageHandler(webapp2.RequestHandler):
+	def get(self):
+		self.error(404)
+		self.response.out.write('Not found')
+
 
 class TapHandler(webapp2.RequestHandler):
     def get(self, slug):
@@ -70,6 +93,6 @@ class ProgressHandler(webapp2.RequestHandler):
 app = webapp2.WSGIApplication([
 	('/', MainHandler),
 	('/location/(.*)', LocationHandler),
-    ('/tap/(.*)',TapHandler),
-    ('/tapins/', ProgressHandler)
+	('/.*', NotFoundPageHandler),
+	('/tap/(.*)',TapHandler)
 	], debug=True)
