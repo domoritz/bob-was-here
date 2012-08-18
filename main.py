@@ -20,6 +20,7 @@ import os
 from model import Location, Tapin
 from google.appengine.api import users
 from google.appengine.ext import db
+import logging as log
 
 jinja_environment = jinja2.Environment(
 	loader=jinja2.FileSystemLoader(os.path.dirname(__file__) + "/templates/"))

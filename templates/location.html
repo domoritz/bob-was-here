@@ -13,7 +13,7 @@
 <h3>People who have been here before</h3>
 <ol data-role="listview" data-theme="a">
 	{% for person in people %}
-    <li>{{ person }}</li>
+    <li>{{ person.nickname() }}</li>
 	{% endfor %}
 	{% if not people %}
 	<li>Currently empty</li>
