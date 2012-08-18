@@ -1,5 +1,0 @@
-      [paste.app_factory]
-      main = scavenger:main
-      [console_scripts]
-      initialize_Scavenger_db = scavenger.scripts.initializedb:main
-      
