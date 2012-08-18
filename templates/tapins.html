@@ -4,7 +4,7 @@
 
 <ul data-role="listview" data-theme="a">
 {%for tapin in tapins%}
-  <li>{{tapin.location.name}} at {{tapin.date|datetime}}</li>
+  <li>{{tapin.location.name}} at {{tapin.date|date}}</li>
 {% endfor %}
 </ul>
 

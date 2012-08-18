@@ -25,11 +25,16 @@ import logging as log
 jinja_environment = jinja2.Environment(
 	loader=jinja2.FileSystemLoader(os.path.dirname(__file__) + "/templates/"))
 
-def format_datetime(datetime):
-	return datetime.strftime('%d/%m/%Y')
+def format_date(datetime):
+	return datetime.strftime('%d/%m/%Y %H:%M')
 
-jinja_environment.filters['datetime'] = format_datetime
+def format_time(datetime):
+	return datetime.strftime('%H:%M')
+
+jinja_environment.filters['date'] = format_date
+jinja_environment.filters['time'] = format_time
 jinja_environment.globals.update(zip=zip)
+
 
 class MainHandler(webapp2.RequestHandler):
 	def get(self):

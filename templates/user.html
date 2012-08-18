@@ -14,7 +14,7 @@
 <ol data-role="listview">
 	{% for tapin in tapins %}
     <li>
-    	<a href="/location/{{tapin.location.slug}}">{{tapin.location.name}} at {{tapin.date|datetime}} </a>
+    	<a href="/location/{{tapin.location.slug}}">{{tapin.location.name}} on {{tapin.date|date}} at {{tapin.date|time}}</a>
     </li>
 	{% endfor %}
 	{% if not tapins %}
