@@ -67,7 +67,7 @@ class LocationHandler(webapp2.RequestHandler):
 				"people": people
 			}))
 		else:
-			self.abort(404)
+			self.redirect("/new-location?slug=%s&message=not-found" % slug)
 
 
 class DeleteHandler(webapp2.RequestHandler):
@@ -130,8 +130,12 @@ class NewLocationHandler(webapp2.RequestHandler):
 			self.redirect("/location/%s" % slug)
 
 	def get(self):
+		slug = self.request.get('slug')
+		message = self.request.get('message')
+		if message == 'not-found':
+			message = 'Slug has not been registered, please provide the details'
 		template = jinja_environment.get_template("new-location.html")
-		self.response.out.write(template.render())
+		self.response.out.write(template.render({"slug":slug, "message":message}))
 
 
 def handle_404(request, response, exception):
