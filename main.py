@@ -110,7 +110,9 @@ class ProgressHandler(webapp2.RequestHandler):
 
 
 class NewLocationHandler(webapp2.RequestHandler):
-	def post(self, slug, name):
+	def post(self, slug):
+		name = self.request.get('name')
+		description = self.request.get('name')
 		location = Location.gql("WHERE slug = :slug", slug=slug).get()
 		if location:
 			self.error(500)
@@ -119,6 +121,7 @@ class NewLocationHandler(webapp2.RequestHandler):
 			location = Location()
 			location.slug = slug
 			location.name = name
+			location.description = description
 			location.put()
 			self.redirect("/location/%s" % slug)
 

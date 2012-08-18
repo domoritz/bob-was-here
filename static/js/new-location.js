@@ -8,7 +8,9 @@ function init() {
 function new_location() {
 	var slug = $('#slug').val();
 	var name = $('#name').val();
-	window.location = "/new-location/" + slug + "/" + name;
+	$.post("/new-location/" + slug, {name: name, slug: slug}, function() {
+		window.location("/location/" + slug);
+	});
 	return false;
 }
 
