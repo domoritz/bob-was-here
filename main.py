@@ -16,10 +16,15 @@
 #
 import webapp2
 from model import Location, Tapin
+from google.appengine.api import users
+from google.appengine.ext import db
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
-        self.response.out.write('Hello world!')
+        if users.get_current_user():
+            pass
+        else:
+            self.redirect(users.create_login_url("/"))
 
 class LocationHandler(webapp2.RequestHandler):
 	def get(self, slug):
