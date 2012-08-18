@@ -15,6 +15,7 @@
 # limitations under the License.
 #
 import webapp2
+from model import Location, Tapin
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
@@ -22,9 +23,14 @@ class MainHandler(webapp2.RequestHandler):
 
 class LocationHandler(webapp2.RequestHandler):
 	def get(self, slug):
-		self.response.out.write(slug)
-	
-		
+		q = Location.gql("WHERE slug = :slug", slug = slug)
+
+		location = q.get()
+		if location:
+			print location.name
+			self.response.out.write(slug + " " + location.name)
+		else:
+			self.response.out.write("Not found")
 
 app = webapp2.WSGIApplication([
 	('/', MainHandler),
