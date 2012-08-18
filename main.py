@@ -60,7 +60,7 @@ class LocationHandler(webapp2.RequestHandler):
 			template = jinja_environment.get_template("location.html")
 			self.response.out.write(template.render({
 				"username":users.get_current_user().nickname(),
-				"location": location.name,
+				"location": location,
 				"people": people
 			}))
 
@@ -95,7 +95,7 @@ def handle_404(request, response, exception):
 app = webapp2.WSGIApplication([
 	('/', MainHandler),
 	('/location/(.*)', LocationHandler),
-	('/tap/(.*)',TapHandler)
+	('/tapin/(.*)',TapHandler)
 	], debug=True)
 
 app.error_handlers[404] = handle_404

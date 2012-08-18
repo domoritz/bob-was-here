@@ -3,25 +3,21 @@
 {% block content %}
 
 <h2>
-{{location}}
+{{location.name}}
 </h2>
 
-<p>Your theme was successfully downloaded. You can use this page as a reference for how to link it up!</p>
-<pre>
-<strong>&lt;link rel=&quot;stylesheet&quot; href=&quot;themes/bob.min.css&quot; /&gt;</strong>
-&lt;link rel=&quot;stylesheet&quot; href=&quot;http://code.jquery.com/mobile/1.1.1/jquery.mobile.structure-1.1.1.min.css&quot; /&gt;
-&lt;script src=&quot;http://code.jquery.com/jquery-1.7.1.min.js&quot;&gt;&lt;/script&gt;
-&lt;script src=&quot;http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.js&quot;&gt;&lt;/script&gt;
-</pre>
-<p>This is content color swatch "A" and a preview of a <a href="#" class="ui-link">link</a>.</p>
-<label for="slider1">Input slider:</label>
-<input type="range" name="slider1" id="slider1" value="50" min="0" max="100" data-theme="a" />
-<fieldset data-role="controlgroup"  data-type="horizontal" data-role="fieldcontain">
-<legend>Cache settings:</legend>
-<input type="radio" name="radio-choice-a1" id="radio-choice-a1" value="on" checked="checked" />
-<label for="radio-choice-a1">On</label>
-<input type="radio" name="radio-choice-a1" id="radio-choice-b1" value="off"  />
-<label for="radio-choice-b1">Off</label>
-</fieldset>
+<p>
+{{location.description}}
+</p>
+
+<h3>People who have been here before</h3>
+<ol data-role="listview" data-theme="a">
+	{% for person in people %}
+    <li>{{ person }}</li>
+	{% endfor %}
+	{% if not people %}
+	<li>Currently empty</li>
+	{% endif %}
+</ol>
 
 {% endblock %}
