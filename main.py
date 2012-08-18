@@ -26,7 +26,7 @@ jinja_environment = jinja2.Environment(
 	loader=jinja2.FileSystemLoader(os.path.dirname(__file__) + "/templates/"))
 
 def format_date(datetime):
-	return datetime.strftime('%d/%m/%Y %H:%M')
+	return datetime.strftime('%d/%m/%Y')
 
 def format_time(datetime):
 	return datetime.strftime('%H:%M')
@@ -55,16 +55,13 @@ class LocationHandler(webapp2.RequestHandler):
 		if location:
 			print location.name
 
-			q = Tapin.gql("WHERE location = :location", location = location)
-
-			for tapin in q:
-				people.append(tapin.user)
+			tapins = Tapin.gql("WHERE location = :location", location = location)
 
 			template = jinja_environment.get_template("location.html")
 			self.response.out.write(template.render({
 				"user": users.get_current_user(),
 				"location": location,
-				"people": people
+				"tapins": tapins
 			}))
 		else:
 			self.abort(404)
