@@ -78,7 +78,7 @@ class TapHandler(webapp2.RequestHandler):
 				tapin.put()
 				self.redirect("/location/"+slug)
 		else:
-			self.redirect(users.create_login_url("/tap/%s" % slug))
+			self.redirect(users.create_login_url("/tapin/%s" % slug))
 
 
 class ProgressHandler(webapp2.RequestHandler):
