@@ -20,7 +20,7 @@
 	{% for tapin in tapins %}
     <li>
     	<h3>{{ tapin.user.nickname() }}</h3>
-		<p>on <strong>{{tapin.date|date}}</strong></p>
+		<p class="ui-li-aside">on <strong>{{tapin.date|date}}</strong></p>
     </li>
 	{% endfor %}
 
