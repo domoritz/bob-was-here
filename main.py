@@ -26,7 +26,7 @@ jinja_environment = jinja2.Environment(
 	loader=jinja2.FileSystemLoader(os.path.dirname(__file__) + "/templates/"))
 
 def format_datetime(datetime):
-	return value.strftime('%d/%m/%Y')
+	return datetime.strftime('%d/%m/%Y')
 
 jinja_environment.filters['datetime'] = format_datetime
 jinja_environment.globals.update(zip=zip)
