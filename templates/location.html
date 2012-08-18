@@ -18,7 +18,11 @@
 <h3>People who have tapped-in here before</h3>
 <ul data-role="listview" data-filter="true" data-filter-placeholder="Filter TapIns..." data-inset="true">
 	{% for tapin in tapins %}
-    <li>
+	{% if tapin.user == user %}
+		<li data-theme="a">
+	{% else %}
+		<li>
+	{% endif %}
     	<h3>{{ tapin.user.nickname() }}</h3>
 		<p class="ui-li-aside">on <strong>{{tapin.date|date}}</strong></p>
     </li>
