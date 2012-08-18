@@ -12,11 +12,11 @@
 
 <h3>Places you have tapped-in</h3>
 <ol data-role="listview" data-theme="a">
-	{% for person in people %}
-    <li>{{ person.nickname() }}</li>
+	{% for tapin in tapins %}
+    <li>{{tapin.location.name}} at {{tapin.date|datetime}}</li>
 	{% endfor %}
-	{% if not people %}
-	<li>Currently empty</li>
+	{% if not tapins %}
+	<li>You haven't tapped-in anywhere yet. </li>
 	{% endif %}
 </ol>
 

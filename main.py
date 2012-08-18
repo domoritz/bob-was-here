@@ -17,7 +17,7 @@
 import webapp2
 import jinja2
 import os
-from model import Location, Tapin
+from model import Location, Tapin, User
 from google.appengine.api import users
 from google.appengine.ext import db
 import logging as log
@@ -56,7 +56,8 @@ class LocationHandler(webapp2.RequestHandler):
 			q = Tapin.gql("WHERE location = :location", location = location)
 
 			for tapin in q:
-				people.append(tapin.user)
+				user = User(_user_id = tapin.user_id)
+				people.append(user)
 
 			template = jinja_environment.get_template("location.html")
 			self.response.out.write(template.render({
@@ -125,7 +126,7 @@ class NewLocationHandler(webapp2.RequestHandler):
 	def get(self):
 		template = jinja_environment.get_template("new-location.html")
 		self.response.out.write(template.render())
-		
+
 
 def handle_404(request, response, exception):
 	response.set_status(404)
@@ -135,7 +136,7 @@ app = webapp2.WSGIApplication([
 	('/', MainHandler),
 	('/location/(.+)', LocationHandler),
 	('/user', UserHandler),
-	('/tap/(.+)', TapHandler),
+	('/tapin/(.+)', TapHandler),
 	('/tapins', ProgressHandler),
 	('/__delete', DeleteHandler),
 	('/new-location', NewLocationHandler)
