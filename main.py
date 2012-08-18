@@ -59,10 +59,12 @@ class LocationHandler(webapp2.RequestHandler):
 			self.error(404)
 			self.response.out.write("Not found")
 
-class NotFoundPageHandler(webapp.RequestHandler):
+
+class NotFoundPageHandler(webapp2.RequestHandler):
     def get(self):
         self.error(404)
         self.response.out.write('Not found')
+
 
 class TapHandler(webapp2.RequestHandler):
     def get(self, slug):
@@ -75,10 +77,9 @@ class TapHandler(webapp2.RequestHandler):
             self.redirect(users.create_login_url("/tap/%s" % slug))
 
 
-
 app = webapp2.WSGIApplication([
 	('/', MainHandler),
 	('/location/(.*)', LocationHandler),
-	('/.*', NotFoundPageHandler)
-    ('/tap/(.*)',TapHandler),
+	('/.*', NotFoundPageHandler),
+    ('/tap/(.*)',TapHandler)
 	], debug=True)
