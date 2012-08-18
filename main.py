@@ -20,6 +20,7 @@ import os
 from model import Location, Tapin
 from google.appengine.api import users
 from google.appengine.ext import db
+import logging as log
 
 jinja_environment = jinja2.Environment(
 	loader=jinja2.FileSystemLoader(os.path.dirname(__file__) + "/templates/"))
@@ -60,7 +61,7 @@ class LocationHandler(webapp2.RequestHandler):
 			template = jinja_environment.get_template("location.html")
 			self.response.out.write(template.render({
 				"username":users.get_current_user().nickname(),
-				"location": location.name,
+				"location": location,
 				"people": people
 			}))
 
