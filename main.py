@@ -64,6 +64,27 @@ class LocationHandler(webapp2.RequestHandler):
 				"location": location,
 				"people": people
 			}))
+		self.abort(404)
+
+
+class DeleteHandler(webapp2.RequestHandler):
+	def get(self):
+		for x in [Location, Tapin]:
+			query = x.all()
+			entries = query.fetch(1000)
+			db.delete(entries)
+
+
+class UserHandler(webapp2.RequestHandler):
+	def get(self):
+		user = users.get_current_user()
+		if user:
+			tapins = Tapin.gql("WHERE user_id = :user", user = user.user_id()) 
+
+			template = jinja_environment.get_template("user.html")
+			self.response.out.write(template.render({"user": user, "tapins": tapins}))
+		else:
+			self.redirect(users.create_login_url("/"))
 
 
 class TapHandler(webapp2.RequestHandler):
@@ -73,10 +94,10 @@ class TapHandler(webapp2.RequestHandler):
 			location = q.get()
 			if location:
 				tapin = Tapin()
-				tapin.user = users.get_current_user()
+				tapin.user_id = users.get_current_user().user_id()
 				tapin.location = location.key()
 				tapin.put()
-				self.redirect("/location/"+slug)
+				self.redirect("/location/" + slug)
 		else:
 			self.redirect(users.create_login_url("/tapin/%s" % slug))
 
@@ -87,6 +108,7 @@ class ProgressHandler(webapp2.RequestHandler):
 		template = jinja_environment.get_template("tapins.html")
 		self.response.out.write(template.render({"tapins":tapins}))
 
+
 def handle_404(request, response, exception):
 	response.set_status(404)
 	response.out.write('404 - Not found')
@@ -94,9 +116,11 @@ def handle_404(request, response, exception):
 
 app = webapp2.WSGIApplication([
 	('/', MainHandler),
-	('/location/(.*)', LocationHandler),
-	('/tap/(.*)',TapHandler),
-	('/tapins/',ProgressHandler)
+	('/location/(.+)', LocationHandler),
+	('/user', UserHandler),
+	('/tap/(.+)', TapHandler),
+	('/tapins', ProgressHandler),
+	('/__delete', DeleteHandler)
 	], debug=True)
 
 app.error_handlers[404] = handle_404
