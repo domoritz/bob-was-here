@@ -16,7 +16,7 @@
 </p>
 
 <h3>People who have tapped-in here before</h3>
-<ul data-role="listview">
+<ul data-role="listview" data-filter="true" data-filter-placeholder="Filter TapIns..." data-inset="true">
 	{% for tapin in tapins %}
     <li>
     	<h3>{{ tapin.user.nickname() }}</h3>
