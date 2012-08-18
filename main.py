@@ -33,9 +33,6 @@ jinja_environment.globals.update(zip=zip)
 
 class MainHandler(webapp2.RequestHandler):
 	def get(self):
-		loc = Location(slug="foo", name="FOO", description="a nice foo bar")
-		loc.put()
-
 		if users.get_current_user():
 			template = jinja_environment.get_template("index.html")
 			self.response.out.write(template.render({"username":users.get_current_user().nickname()}))
@@ -56,8 +53,7 @@ class LocationHandler(webapp2.RequestHandler):
 			q = Tapin.gql("WHERE location = :location", location = location)
 
 			for tapin in q:
-				user = User(_user_id = tapin.user_id)
-				people.append(user)
+				people.append(tapin.user)
 
 			template = jinja_environment.get_template("location.html")
 			self.response.out.write(template.render({
@@ -65,7 +61,8 @@ class LocationHandler(webapp2.RequestHandler):
 				"location": location,
 				"people": people
 			}))
-		self.abort(404)
+		else:
+			self.abort(404)
 
 
 class DeleteHandler(webapp2.RequestHandler):
@@ -80,7 +77,7 @@ class UserHandler(webapp2.RequestHandler):
 	def get(self):
 		user = users.get_current_user()
 		if user:
-			tapins = Tapin.gql("WHERE user_id = :user", user = user.user_id()) 
+			tapins = Tapin.gql("WHERE user = :user", user = user) 
 
 			template = jinja_environment.get_template("user.html")
 			self.response.out.write(template.render({"user": user, "tapins": tapins}))
@@ -95,7 +92,7 @@ class TapHandler(webapp2.RequestHandler):
 			location = q.get()
 			if location:
 				tapin = Tapin()
-				tapin.user_id = users.get_current_user().user_id()
+				tapin.user = users.get_current_user()
 				tapin.location = location.key()
 				tapin.put()
 				self.redirect("/location/" + slug)

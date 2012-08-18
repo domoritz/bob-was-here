@@ -1,5 +1,10 @@
 {% extends "base.html" %}
 
+
+{% block title %}
+<a href="/user" data-icon="gear" class="ui-btn-right">Your Account</a>
+{% endblock %}
+
 {% block content %}
 
 <h2>
@@ -15,6 +20,7 @@
 	{% for person in people %}
     <li>{{ person.nickname() }}</li>
 	{% endfor %}
+
 	{% if not people %}
 	<li>Currently empty</li>
 	{% endif %}
