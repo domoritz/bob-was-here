@@ -20,5 +20,13 @@ class MainHandler(webapp2.RequestHandler):
     def get(self):
         self.response.out.write('Hello world!')
 
-app = webapp2.WSGIApplication([('/', MainHandler)],
-                              debug=True)
+class LocationHandler(webapp2.RequestHandler):
+	def get(self, slug):
+		self.response.out.write(slug)
+	
+		
+
+app = webapp2.WSGIApplication([
+	('/', MainHandler),
+	('/location/(.*)', LocationHandler)
+	], debug=True)
