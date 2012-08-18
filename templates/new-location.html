@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block header %}
+<script src="/js/new-location.js"></script>
+{% endblock %}
+
+{% block content %}
+
+<form action="GET">
+	<label for="slug">Slug: </label><input id="slug" name="slug" type="text" value=""/>
+	<label for="slug">Name: </label><input id="name" name="name" type="text" value=""/>
+	<button id="new-location">Create</button>
+</form>
+
+{% endblock %}

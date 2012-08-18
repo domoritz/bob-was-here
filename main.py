@@ -92,11 +92,31 @@ def handle_404(request, response, exception):
 	response.out.write('404 - Not found')
 
 
+class NewLocationHandler(webapp2.RequestHandler):
+	def get(self, slug, name):
+		location = Location.gql("WHERE slug = :slug", slug=slug).get()
+		if location:
+			self.error(500)
+			self.response.out.write('Slug already used')
+		else:
+			location = Location()
+			location.slug = slug
+			location.name = name
+			location.put()
+			self.redirect("/location/%s" % slug)
+
+class HtmlHandler(webapp2.RequestHandler):
+	def get(self, page):
+		template = jinja_environment.get_template("%s.html" % page)
+		self.response.out.write(template.render({}))
+
 app = webapp2.WSGIApplication([
 	('/', MainHandler),
 	('/location/(.*)', LocationHandler),
 	('/tap/(.*)',TapHandler),
-	('/tapins/',ProgressHandler)
+	('/tapins/',ProgressHandler),
+	('/(.*).html',HtmlHandler),
+	('/new-location/(.*)/(.*)',NewLocationHandler),
 	], debug=True)
 
 app.error_handlers[404] = handle_404
