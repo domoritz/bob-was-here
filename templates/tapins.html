@@ -2,8 +2,8 @@
 
 {%block content %}
 
-{%for tapin in tapins %}
-  <li>{{tapin.location}} at {{tapin.date|datetime}}</li>
+{%for tapin in tapins%}
+  <li>{{tapin.location.name}} at {{tapin.date|datetime}}</li>
 {% endfor %}
 
 {% endblock %}

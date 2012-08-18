@@ -28,7 +28,7 @@ def format_datetime(datetime):
 	return value.strftime('%d/%m/%Y')
 
 jinja_environment.filters['datetime'] = format_datetime
-
+jinja_environment.globals.update(zip=zip)
 
 class MainHandler(webapp2.RequestHandler):
 	def get(self):
@@ -86,7 +86,6 @@ class ProgressHandler(webapp2.RequestHandler):
 		template = jinja_environment.get_template("tapins.html")
 		self.response.out.write(template.render({"tapins":tapins}))
 
-
 def handle_404(request, response, exception):
 	response.set_status(404)
 	response.out.write('404 - Not found')
@@ -95,7 +94,8 @@ def handle_404(request, response, exception):
 app = webapp2.WSGIApplication([
 	('/', MainHandler),
 	('/location/(.*)', LocationHandler),
-	('/tap/(.*)',TapHandler)
+	('/tap/(.*)',TapHandler),
+	('/tapins/',ProgressHandler)
 	], debug=True)
 
 app.error_handlers[404] = handle_404
