@@ -25,7 +25,7 @@ jinja_environment = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__) + "/templates/"))
 
 def format_datetime(datetime):
-    pass
+    return value.strftime('%d/%m/%Y')
 
 jinja_environment.filters['datetime'] = format_datetime
 
@@ -54,15 +54,22 @@ class TapHandler(webapp2.RequestHandler):
         if users.get_current_user():
             locations = Location.gql("WHERE slug = :slug", slug=slug)
             if locations:
-                location[0].key()
-                pass
+                tapin = Tapin()
+                tapin.user = users.get_current_user()
+                tapin.location = location[0].key()
+                tapin.put()
         else:
             self.redirect(users.create_login_url("/tap/%s" % slug))
 
-
+class ProgressHandler(webapp2.RequestHandler):
+    def get(self):
+        tapins = Tapin.gql("ORDER BY date")
+        template = jinja_environment.get_template("tapins.html")
+        self.response.out.write(template.render({"tapins":tapins}))
 
 app = webapp2.WSGIApplication([
 	('/', MainHandler),
-	('/location/(.*)', LocationHandler)
-    ('/tap/(.*)',TapHandler)
+	('/location/(.*)', LocationHandler),
+    ('/tap/(.*)',TapHandler),
+    ('/tapins/', ProgressHandler)
 	], debug=True)
