@@ -15,16 +15,28 @@
 # limitations under the License.
 #
 import webapp2
+import jinja2
+import os
 from model import Location, Tapin
 from google.appengine.api import users
 from google.appengine.ext import db
 
+jinja_environment = jinja2.Environment(
+    loader=jinja2.FileSystemLoader(os.path.dirname(__file__) + "/templates/"))
+
+def format_datetime(datetime):
+    pass
+
+jinja_environment.filters['datetime'] = format_datetime
+
+
 class MainHandler(webapp2.RequestHandler):
-	def get(self):
-		if users.get_current_user():
-			pass
-		else:
-			self.redirect(users.create_login_url("/"))
+    def get(self):
+        if users.get_current_user():
+            template = jinja_environment.get_template("index.html")
+            self.response.out.write(template.render({"username":users.get_current_user().nickname()}))
+        else:
+            self.redirect(users.create_login_url("/"))
 
 
 class LocationHandler(webapp2.RequestHandler):
@@ -47,15 +59,26 @@ class LocationHandler(webapp2.RequestHandler):
 			self.error(404)
 			self.response.out.write("Not found")
 
-
 class NotFoundPageHandler(webapp.RequestHandler):
     def get(self):
         self.error(404)
         self.response.out.write('Not found')
+
+class TapHandler(webapp2.RequestHandler):
+    def get(self, slug):
+        if users.get_current_user():
+            locations = Location.gql("WHERE slug = :slug", slug=slug)
+            if locations:
+                location[0].key()
+                pass
+        else:
+            self.redirect(users.create_login_url("/tap/%s" % slug))
+
 
 
 app = webapp2.WSGIApplication([
 	('/', MainHandler),
 	('/location/(.*)', LocationHandler),
 	('/.*', NotFoundPageHandler)
+    ('/tap/(.*)',TapHandler),
 	], debug=True)
