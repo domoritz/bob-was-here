@@ -25,13 +25,16 @@ jinja_environment = jinja2.Environment(
 	loader=jinja2.FileSystemLoader(os.path.dirname(__file__) + "/templates/"))
 
 def format_datetime(datetime):
-    return value.strftime('%d/%m/%Y')
+	return value.strftime('%d/%m/%Y')
 
 jinja_environment.filters['datetime'] = format_datetime
 
 
 class MainHandler(webapp2.RequestHandler):
 	def get(self):
+		loc = Location(slug="foo", name="FOO", description="a nice foo bar")
+		loc.put()
+
 		if users.get_current_user():
 			template = jinja_environment.get_template("index.html")
 			self.response.out.write(template.render({"username":users.get_current_user().nickname()}))
@@ -61,38 +64,38 @@ class LocationHandler(webapp2.RequestHandler):
 				"people": people
 			}))
 
-		else:
-			self.error(404)
-			self.response.out.write("Not found")
-
-
-class NotFoundPageHandler(webapp2.RequestHandler):
-	def get(self):
-		self.error(404)
-		self.response.out.write('Not found')
-
 
 class TapHandler(webapp2.RequestHandler):
-    def get(self, slug):
-        if users.get_current_user():
-            locations = Location.gql("WHERE slug = :slug", slug=slug)
-            if locations:
-                tapin = Tapin()
-                tapin.user = users.get_current_user()
-                tapin.location = location[0].key()
-                tapin.put()
-        else:
-            self.redirect(users.create_login_url("/tap/%s" % slug))
+	def get(self, slug):
+		if users.get_current_user():
+			q = Location.gql("WHERE slug = :slug", slug=slug)
+			location = q.get()
+			if location:
+				tapin = Tapin()
+				tapin.user = users.get_current_user()
+				tapin.location = location.key()
+				tapin.put()
+				self.redirect("/location/"+slug)
+		else:
+			self.redirect(users.create_login_url("/tap/%s" % slug))
+
 
 class ProgressHandler(webapp2.RequestHandler):
-    def get(self):
-        tapins = Tapin.gql("ORDER BY date")
-        template = jinja_environment.get_template("tapins.html")
-        self.response.out.write(template.render({"tapins":tapins}))
+	def get(self):
+		tapins = Tapin.gql("ORDER BY date")
+		template = jinja_environment.get_template("tapins.html")
+		self.response.out.write(template.render({"tapins":tapins}))
+
+
+def handle_404(request, response, exception):
+	response.set_status(404)
+	response.out.write('404 - Not found')
+
 
 app = webapp2.WSGIApplication([
 	('/', MainHandler),
 	('/location/(.*)', LocationHandler),
-	('/.*', NotFoundPageHandler),
 	('/tap/(.*)',TapHandler)
 	], debug=True)
+
+app.error_handlers[404] = handle_404
