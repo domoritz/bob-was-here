@@ -6,9 +6,15 @@ $(function() {
 	    maxZoom: 18
 	}).addTo(map);
 
-	var polygon = L.polyline(locations, {fill: false}).addTo(map);
+	for(index in positions) {
+		L.marker(positions[index]).addTo(map);
+	}
 
-	map.locate({setView: true, maxZoom: 16});
+	var polygon = L.polyline(positions, {fill: false}).addTo(map);
+
+	map.fitBounds(polygon.getBounds());
+
+	//map.locate({setView: true, maxZoom: 16});
 
 	function onLocationFound(e) {
 	    var radius = e.accuracy / 2;

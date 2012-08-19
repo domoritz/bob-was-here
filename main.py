@@ -66,7 +66,7 @@ class LocationHandler(webapp2.RequestHandler):
 				grouped[tapin.date.date()].append(tapin)
 
 			tapin = self.request.get('tapin')
-			
+
 			template = jinja_environment.get_template("location.html")
 			self.response.out.write(template.render({
 				"user": users.get_current_user(),
@@ -93,7 +93,7 @@ class UserHandler(webapp2.RequestHandler):
 			tapins = Tapin.gql("WHERE user = :user ORDER BY date DESC", user = user)
 			locations = []
 			for loc in filter(None, map(lambda x: x.geolocation, tapins)):
-				locations.append([loc.lat(), loc.lan()])
+				locations.append([loc.lat, loc.lon])
 			pointjson = json.dumps(locations)
 
 			template = jinja_environment.get_template("user.html")
@@ -159,6 +159,7 @@ class GeolocationHandler(webapp2.RequestHandler):
 			tapin = Tapin.get(tapin_key)
 			if tapin:
 				tapin.geolocation = db.GeoPt(latitude, longitude)
+				tapin.put()
 				self.response.out.write('Location recorded')
 			else:
 				self.response.set_status(400)
