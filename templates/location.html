@@ -2,7 +2,7 @@
 
 
 {% block title %}
-<a href="/user" data-icon="gear" class="ui-btn-right" data-iconpos="notext" data-inline="true">{{ user.nickname() }}</a>
+<a href="/user" data-icon="star" class="ui-btn-right" data-ajax="false" data-iconpos="notext" data-inline="true">{{ user.nickname() }}</a>
 {% endblock %}
 
 {% block content %}
@@ -17,18 +17,19 @@
 
 <h3>People who have tapped-in here before</h3>
 <ul data-role="listview" data-filter="true" data-filter-placeholder="Filter TapIns..." data-inset="true">
-	{% for tapin in tapins %}
-	{% if tapin.user == user %}
-		<li data-theme="b">
-	{% else %}
-		<li>
-	{% endif %}
-    	<h3>{{ tapin.user.nickname() }}</h3>
-		<p class="ui-li-aside">on <strong class="millis">{{tapin.date|millis}}</strong></p>
-    </li>
+	{% for x in tapins %}
+		<li data-role="list-divider">{{x|date}}</li>
+		{% for tapin in tapins[x] %}
+			{% if tapin.user == user %}
+				<li data-theme="b">
+			{% else %}
+				<li>
+			{% endif %}
+		    	<h3>{{ tapin.user.nickname() }}</h3>
+				<p class="ui-li-aside">on <strong class="millis">{{tapin.date|millis}}</strong></p>
+		    </li>
+		{% endfor %}
 	{% endfor %}
-
-	<li data-role="list-divider"></li>
 
 	{% if not tapins %}
 	<li>Currently empty</li>

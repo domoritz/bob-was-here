@@ -61,11 +61,19 @@ class LocationHandler(webapp2.RequestHandler):
 
 			tapins = Tapin.gql("WHERE location = :location ORDER BY date", location = location)
 
+			from collections import defaultdict
+			grouped = defaultdict(list)
+			for tapin in tapins: 
+				grouped[tapin.date.date()].append(tapin)
+
+			for x in grouped: 
+				log.warn(grouped[x])
+
 			template = jinja_environment.get_template("location.html")
 			self.response.out.write(template.render({
 				"user": users.get_current_user(),
 				"location": location,
-				"tapins": tapins
+				"tapins": grouped
 			}))
 		else:
 			self.redirect("/new-location?slug=%s&message=not-found" % slug)
