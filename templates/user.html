@@ -1,7 +1,17 @@
 {% extends "base.html" %}
 
-{% block content %}
 
+{% block header %}
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4.4/leaflet.css" />
+<!--[if lte IE 8]>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4.4/leaflet.ie.css" />
+<![endif]-->
+<script src="http://cdn.leafletjs.com/leaflet-0.4.4/leaflet.js"></script>
+
+<script src="/js/map.js"></script>
+{% endblock %}
+
+{% block content %}
 <h2>
 {{user.nickname()}}
 </h2>
@@ -23,5 +33,4 @@
 	<li>You haven't tapped-in anywhere yet. </li>
 	{% endif %}
 </ol>
-
 {% endblock %}
