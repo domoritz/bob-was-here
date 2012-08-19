@@ -58,8 +58,6 @@ class LocationHandler(webapp2.RequestHandler):
 
 		location = q.get()
 		if location:
-			print location.name
-
 			tapins = Tapin.gql("WHERE location = :location ORDER BY date", location = location)
 
 			from collections import defaultdict
@@ -67,10 +65,8 @@ class LocationHandler(webapp2.RequestHandler):
 			for tapin in tapins: 
 				grouped[tapin.date.date()].append(tapin)
 
-			for x in grouped: 
-				log.warn(grouped[x])
-
 			tapin = self.request.get('tapin')
+			
 			template = jinja_environment.get_template("location.html")
 			self.response.out.write(template.render({
 				"user": users.get_current_user(),
