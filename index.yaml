@@ -14,3 +14,9 @@ indexes:
   properties:
   - name: location
   - name: date
+
+- kind: Tapin
+  properties:
+  - name: user
+  - name: date
+    direction: desc
