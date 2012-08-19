@@ -96,9 +96,9 @@ class UserHandler(webapp2.RequestHandler):
 		if user:
 			tapins = Tapin.gql("WHERE user = :user ORDER BY date DESC", user = user)
 			locations = []
-			for loc in map(lambda x: x.geolocation, tapins):
+			for loc in filter(None, map(lambda x: x.geolocation, tapins)):
 				locations.append([loc.lat(), loc.lan()])
-			#pointjson = json.dumps([[lat, lon] for (lat, lon) in map(lambda x: x.geolocation, tapins)])
+			pointjson = json.dumps(locations)
 
 			template = jinja_environment.get_template("user.html")
 			self.response.out.write(template.render({"user": user, "tapins": tapins, "pointjson": pointjson}))

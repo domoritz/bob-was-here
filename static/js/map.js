@@ -6,11 +6,7 @@ $(function() {
 	    maxZoom: 18
 	}).addTo(map);
 
-	var polygon = L.polyline([
-	    [51.509, -0.08],
-	    [51.503, -0.06],
-	    [51.51, -0.047]
-	], {fill: false}).addTo(map);
+	var polygon = L.polyline(locations, {fill: false}).addTo(map);
 
 	map.locate({setView: true, maxZoom: 16});
 
