@@ -1,10 +1,17 @@
 {% extends "base.html" %}
 
+{% block header %}
+<script src="/js/geolocation.js"></script>
+{% endblock %}
+
+
 {% block title %}
 <a href="/user" data-icon="star" class="ui-btn-right" data-ajax="false" data-iconpos="notext" data-inline="true">{{ user.nickname() }}</a>
 {% endblock %}
 
 {% block content %}
+
+<span id="tapin" style="display:none">{{tapin}}</span>
 
 <h2>
 {{location.name}}

@@ -69,11 +69,13 @@ class LocationHandler(webapp2.RequestHandler):
 			for x in grouped: 
 				log.warn(grouped[x])
 
+			tapin = self.request.get('tapin')
 			template = jinja_environment.get_template("location.html")
 			self.response.out.write(template.render({
 				"user": users.get_current_user(),
 				"location": location,
-				"tapins": grouped
+				"tapins": grouped,
+				"tapin": tapin
 			}))
 		else:
 			self.redirect("/new-location?slug=%s&message=not-found" % slug)
@@ -109,7 +111,7 @@ class TapHandler(webapp2.RequestHandler):
 				tapin.user = users.get_current_user()
 				tapin.location = location.key()
 				tapin.put()
-				self.redirect("/location/" + slug)
+				self.redirect("/location/" + slug + "?tapin=" + str(tapin.key()))
 		else:
 			self.redirect(users.create_login_url("/tapin/%s" % slug))
 
@@ -146,6 +148,23 @@ class NewLocationHandler(webapp2.RequestHandler):
 		template = jinja_environment.get_template("new-location.html")
 		self.response.out.write(template.render({"slug":slug, "message":message}))
 
+class GeolocationHandler(webapp2.RequestHandler):
+	def post(self):
+		tapin_key = self.request.get('tapin')
+		latitude = self.request.get('latitude')
+		longitude = self.request.get('longitude')
+		if tapin_key:
+			tapin_key = db.Key(tapin_key)
+			tapin = Tapin.get(tapin_key)
+			if tapin:
+				tapin.geolocation = db.GeoPt(latitude, longitude)
+				self.response.out.write('Location recorded')
+			else:
+				self.response.set_status(400)
+				self.response.out.write('400 - Tapin not found')
+		else:
+			self.response.set_status(400)
+			self.response.out.write('400 - Tapin not provided')
 
 def handle_404(request, response, exception):
 	response.set_status(404)
@@ -158,7 +177,8 @@ app = webapp2.WSGIApplication([
 	('/tapin/(.+)', TapHandler),
 	('/tapins', ProgressHandler),
 	('/__delete', DeleteHandler),
-	('/new-location', NewLocationHandler)
+	('/new-location', NewLocationHandler),
+	('/geolocation', GeolocationHandler),
 	], debug=True)
 
 app.error_handlers[404] = handle_404
