@@ -21,6 +21,7 @@ from model import Location, Tapin, User
 from google.appengine.api import users
 from google.appengine.ext import db
 import logging as log
+import time
 
 jinja_environment = jinja2.Environment(
 	loader=jinja2.FileSystemLoader(os.path.dirname(__file__) + "/templates/"))
@@ -30,6 +31,9 @@ def format_date(datetime):
 
 def format_time(datetime):
 	return datetime.strftime('%H:%M')
+
+def format_date_millis(datetime):
+	return int(time.mktime(datetime.timetuple()) * 1000)
 
 jinja_environment.filters['date'] = format_date
 jinja_environment.filters['time'] = format_time
@@ -86,7 +90,7 @@ class UserHandler(webapp2.RequestHandler):
 	def get(self):
 		user = users.get_current_user()
 		if user:
-			tapins = Tapin.gql("WHERE user = :user", user = user) 
+			tapins = Tapin.gql("WHERE user = :user ORDER BY date DESC", user = user)
 
 			template = jinja_environment.get_template("user.html")
 			self.response.out.write(template.render({"user": user, "tapins": tapins}))
