@@ -78,7 +78,7 @@ class UserHandler(webapp2.RequestHandler):
 	def get(self):
 		user = users.get_current_user()
 		if user:
-			tapins = Tapin.gql("WHERE user = :user", user = user) 
+			tapins = Tapin.gql("WHERE user = :user ORDER BY date DESC", user = user)
 
 			template = jinja_environment.get_template("user.html")
 			self.response.out.write(template.render({"user": user, "tapins": tapins}))
