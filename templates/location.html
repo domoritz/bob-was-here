@@ -34,7 +34,7 @@
 				<li>
 			{% endif %}
 		    	<h3>{{ tapin.user.nickname() }}</h3>
-				<p class="ui-li-aside">on <time class="timeago" datetime="{{tapin.date|iso}}"></time></p>
+				<p class="ui-li-aside">on <strong>{{tapin.date|date}}</strong> at <strong>{{tapin.date|time}}</strong></p>
 		    </li>
 		{% endfor %}
 	{% endfor %}
