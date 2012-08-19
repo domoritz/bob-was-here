@@ -32,12 +32,12 @@ def format_date(datetime):
 def format_time(datetime):
 	return datetime.strftime('%H:%M')
 
-def format_date_millis(datetime):
-	return int(time.mktime(datetime.timetuple()) * 1000)
+def format_date_iso(datetime):
+	return datetime.isoformat()
 
 jinja_environment.filters['date'] = format_date
 jinja_environment.filters['time'] = format_time
-jinja_environment.filters['millis'] = format_date_millis
+jinja_environment.filters['iso'] = format_date_iso
 jinja_environment.globals.update(zip=zip)
 
 class MainHandler(webapp2.RequestHandler):

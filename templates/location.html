@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
+{% block header %}
+<script src="/js/timeago.js" type="text/javascript" />
+<script src="/js/format_dates.js" type="text/javascript" />
+{% endblock %}
 
 {% block title %}
 <a href="/user" data-icon="star" class="ui-btn-right" data-ajax="false" data-iconpos="notext" data-inline="true">{{ user.nickname() }}</a>
@@ -26,7 +30,7 @@
 				<li>
 			{% endif %}
 		    	<h3>{{ tapin.user.nickname() }}</h3>
-				<p class="ui-li-aside">on <strong class="millis">{{tapin.date|millis}}</strong></p>
+				<p class="ui-li-aside">on <time class="timeago" datetime="{{tapin.date|iso}}"></time></p>
 		    </li>
 		{% endfor %}
 	{% endfor %}
