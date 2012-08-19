@@ -54,7 +54,7 @@ class LocationHandler(webapp2.RequestHandler):
 		if location:
 			print location.name
 
-			tapins = Tapin.gql("WHERE location = :location", location = location)
+			tapins = Tapin.gql("WHERE location = :location ORDER BY date", location = location)
 
 			template = jinja_environment.get_template("location.html")
 			self.response.out.write(template.render({
