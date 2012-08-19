@@ -22,6 +22,7 @@ from google.appengine.api import users
 from google.appengine.ext import db
 import logging as log
 import time
+import json
 
 jinja_environment = jinja2.Environment(
 	loader=jinja2.FileSystemLoader(os.path.dirname(__file__) + "/templates/"))
@@ -92,9 +93,13 @@ class UserHandler(webapp2.RequestHandler):
 		user = users.get_current_user()
 		if user:
 			tapins = Tapin.gql("WHERE user = :user ORDER BY date DESC", user = user)
+			locations = []
+			for loc in map(lambda x: x.geolocation, tapins):
+				locations.append([loc.lat(), loc.lan()])
+			#pointjson = json.dumps([[lat, lon] for (lat, lon) in map(lambda x: x.geolocation, tapins)])
 
 			template = jinja_environment.get_template("user.html")
-			self.response.out.write(template.render({"user": user, "tapins": tapins}))
+			self.response.out.write(template.render({"user": user, "tapins": tapins, "pointjson": pointjson}))
 		else:
 			self.redirect(users.create_login_url("/"))
 

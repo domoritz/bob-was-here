@@ -8,7 +8,12 @@
 <![endif]-->
 <script src="http://cdn.leafletjs.com/leaflet-0.4.4/leaflet.js"></script>
 
-<script src="/js/map.js"></script>
+<script src="/js/map.js" async defer></script>
+
+<script type="text/javascript" charset="utf-8" id="mappoints">
+{{ pointjson }}
+</script>
+
 {% endblock %}
 
 {% block content %}
