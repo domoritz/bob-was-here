@@ -7,14 +7,24 @@
 		<title>TapIn - Show where you have been</title>
 		<link rel="stylesheet" href="/css/bob.css" />
 		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.1/jquery.mobile.structure-1.1.1.min.css" />
+		<link rel="stylesheet" href="/css/main.css" />
 		<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
 		<script src="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.js"></script>
+
+		<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4.4/leaflet.css" />
+		<!--[if lte IE 8]>
+		    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4.4/leaflet.ie.css" />
+		<![endif]-->
+		<script src="http://cdn.leafletjs.com/leaflet-0.4.4/leaflet.js"></script>
+
+		<script src="/js/main.js"></script>
+
 {% block header %}
 {% endblock %}
 	</head>
 	<body>
 		<div data-role="page" data-theme="c">
-			<div data-role="header" data-position="fixed" data-theme="c">
+			<div data-role="header" data-position="inline" data-theme="c">
 				<h1><img src="/img/tap-in.png" alt="TapIn - Show where you have been" /></h1>
 				{% block title %}
 				{% endblock %}

@@ -19,14 +19,16 @@
 <ul data-role="listview" data-filter="true" data-filter-placeholder="Filter TapIns..." data-inset="true">
 	{% for tapin in tapins %}
 	{% if tapin.user == user %}
-		<li data-theme="a">
+		<li data-theme="b">
 	{% else %}
 		<li>
 	{% endif %}
     	<h3>{{ tapin.user.nickname() }}</h3>
-		<p class="ui-li-aside">on <strong>{{tapin.date|date}}</strong></p>
+		<p class="ui-li-aside">on <strong>{{tapin.date|date}}</strong> at <strong>{{tapin.date|time}}</strong></p>
     </li>
 	{% endfor %}
+
+	<li data-role="list-divider"></li>
 
 	{% if not tapins %}
 	<li>Currently empty</li>

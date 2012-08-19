@@ -35,7 +35,6 @@ jinja_environment.filters['date'] = format_date
 jinja_environment.filters['time'] = format_time
 jinja_environment.globals.update(zip=zip)
 
-
 class MainHandler(webapp2.RequestHandler):
 	def get(self):
 		if users.get_current_user():
